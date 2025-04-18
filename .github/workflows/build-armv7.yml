@@ -1,0 +1,46 @@
+name: Build ARMv7 Binary
+
+on:
+  push:
+    branches: [ "main" ] # 触发分支
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: '1.24.2' # 检查项目需要的 Go 版本
+
+    - name: Set up node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '20' 
+
+    - name: Build AdGuardHome
+      env:
+        GOOS: linux
+        GOARCH: arm
+        GOARM: 7
+      run: |
+        # 安装依赖（根据项目实际需要）
+        sudo apt-get update
+        sudo apt-get install -y gcc-arm-linux-gnueabihf
+        
+        # 编译命令（参考项目文档）
+        make
+        
+        # 压缩二进制文件
+        # upx --best AdGuardHome || echo "UPX not installed, skipping compression"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: AdGuardHome-armv7
+        path: AdGuardHome
