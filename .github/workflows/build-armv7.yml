@@ -30,8 +30,8 @@ jobs:
         GOARM: 7
       run: |
         # 安装依赖（根据项目实际需要）
-        sudo apt-get update
-        sudo apt-get install -y gcc-arm-linux-gnueabihf
+        # sudo apt-get update
+        # sudo apt-get install -y gcc-arm-linux-gnueabihf
         
         # 编译命令（参考项目文档）
         make
